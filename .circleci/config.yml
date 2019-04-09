@@ -1,0 +1,44 @@
+defaults: &defaults
+  working_directory: ~/png
+  docker:
+    - image: circleci/node:11.4.0
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      # Checkout the code from the branch into the working_directory
+      - checkout
+      # Log the current branch
+      - run:
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
+      # Download and cache dependencies
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      # Install project dependencies
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      # Cache local dependencies if they don't exist
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      # Lint the server source code
+      - run:
+          name: Linting
+          command: yarn lint
+      # Run tests
+      - run:
+          name: Test
+          command: yarn test
+      - store_artifacts:
+          path: coverage
+          destination: coverage
+      # - Run  coverage and send to coveralls
+      - run:
+          name: Coverage
+          command: yarn coverage
