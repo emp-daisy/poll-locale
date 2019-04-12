@@ -1,15 +1,14 @@
 import mongoose from 'mongoose';
 
 import Location from './location';
+import SubLocation from './sub-location';
 
-const connection = () => {
-  return mongoose.connect(process.env.DATABASE_URL, {
-    useNewUrlParser: true,
-    useCreateIndex: true
-  });
-};
+const connection = () => mongoose.connect(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+});
 
-const models = { Location };
+const models = { Location, SubLocation };
 
 export { connection };
 

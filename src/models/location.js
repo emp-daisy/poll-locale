@@ -4,23 +4,18 @@ const locationSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
-  count: {
-    type: Number,
-    required: true,
+  decription: {
+    type: String,
   },
 });
 
-locationSchema.pre('remove', function(next) {
-  // this.model('Message').deleteMany({
-  //   $or: [
-  //     {senderMobile: this.mobile},
-  //     {receiverMobile: this.mobile}
-  //   ]}, next);
+locationSchema.pre('remove', (next) => {
+  this.model('SubLocation').deleteMany({
+    locationId: this.locationId,
+  }, next);
 });
-
-//Alias _id to id virtually
-locationSchema.virtual('id').get(function() { return this._id; });
 
 const Location = mongoose.model('Location', locationSchema);
 

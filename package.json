@@ -7,24 +7,28 @@
   "author": "Jessica M <adajess01@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "babel-node -r node_modules/dotenv/config index.js",
-    "start:dev": "nodemon --exec yarn start",
+    "start": "node ./dist/index.js",
+    "start:dev": "nodemon --exec 'babel-node ./src/index.js'",
     "test": "jest --detectOpenHandles",
-    "lint": "eslint ./src --ext .js --fix"
+    "lint": "eslint ./src --ext .js --fix",
+    "build": "rm -rf dist/* && babel -d ./dist ./src -s"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.4.3",
     "@babel/node": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.4.3",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.4.3",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "jest": "^24.7.1",
-    "supertest": "^4.0.2",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@babel/runtime": "^7.4.3",
     "body-parser": "^1.18.3",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
@@ -60,7 +64,7 @@
   },
   "nodemonConfig": {
     "watch": [
-      "server"
+      "src"
     ],
     "ext": "js ts json",
     "ignore": [

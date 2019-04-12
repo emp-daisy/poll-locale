@@ -1,3 +1,5 @@
-import LocationController from "./location";
+import LocationController from './location';
+import SubLocationController from './sub-location';
 
-export { LocationController };
+// eslint-disable-next-line import/prefer-default-export
+export { LocationController, SubLocationController };
