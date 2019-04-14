@@ -1,17 +1,23 @@
 import { pickBy, identity } from 'lodash';
 import Models from '../models';
+import ErrorHandling from '../utils/error-handling';
+import { isMongoId } from '../utils/validation';
 
 const { SubLocation } = Models;
 
 const SubLocationController = {
-  getSubLocation: async (req, res) => {
-    const locations = SubLocation.find();
+  getSubLocation: async (_req, res) => {
+    const locations = await SubLocation.find();
     res.status(200).json({ locations, message: 'All sub-locations' });
   },
-  getOneSubLocation: async (req, res) => {
-    const { name, id } = req.params;
-    const location = SubLocation.findOne({ $or: [{ name }, { _id: id }] });
-    res.status(200).json({ location, message: 'Get one sub-location' });
+  getOneSubLocation: async ({ params: { search } }, res) => {
+    const searchObject = isMongoId(search) ? { _id: search } : { name: new RegExp(search, 'i') };
+    let location = await SubLocation.findOne(searchObject)
+      .populate('locationId')
+      .exec();
+    location = location.toJSON({ getters: false, virtuals: false });
+    if (location === null) { return res.status(404).json({ message: 'Location not found' }); }
+    return res.status(200).json({ location, message: 'Get one sub-location' });
   },
   addSubLocation: async (req, res) => {
     const {
@@ -24,7 +30,7 @@ const SubLocationController = {
       const data = await newLocation.save();
       return res.status(201).json({ location: data, message: 'Created a sub-location' });
     } catch (err) {
-      const message = (err.name === 'MongoError' && err.code === 11000) ? 'Sub-Location name already exist!' : 'Failed to create a sub-location';
+      const message = ErrorHandling(err) || 'Failed to create a sub-location';
       return res.status(500).json({ message });
     }
   },
@@ -34,24 +40,24 @@ const SubLocationController = {
       name, maleCount, femaleCount, locationId,
     } = req.body;
     try {
-      const updatedLocation = await SubLocation.findByIdAndUpdate(
+      const location = await SubLocation.findByIdAndUpdate(
         id, pickBy({
           name, maleCount, femaleCount, locationId,
-        }, identity), { new: true },
+        }, identity), { new: true, runValidators: true },
       );
-      if (updatedLocation == null) { return res.status(500).json({ message: 'Sub-Location does not exist' }); }
-      return res.status(200).json({ location: updatedLocation, message: 'Updated a sub-location' });
+      if (location === null) { return res.status(500).json({ message: 'Sub-Location does not exist' }); }
+      return res.status(200).json({ location, message: 'Updated a sub-location' });
     } catch (err) {
-      const message = (err.name === 'MongoError' && err.code === 11000) ? 'Location name already exist!' : 'Failed to update a location';
+      const message = ErrorHandling(err) || 'Failed to create a sub-location';
       return res.status(500).json({ message });
     }
   },
   deleteSubLocation: async (req, res) => {
     const { id } = req.params;
-    const location = SubLocation.findById(id);
+    const location = await SubLocation.findById(id);
     try {
-      const deletedLocation = location.remove();
-      if (deletedLocation == null) { return res.status(500).json({ message: 'Sub-Location does not exist' }); }
+      if (location == null) { return res.status(500).json({ message: 'Sub-Location does not exist' }); }
+      const deletedLocation = await location.remove();
       return res.status(200).json({ location: deletedLocation, message: 'Deleted a sub-location' });
     } catch (err) {
       return res.status(500).json({ message: 'Failed to delete a sub-location' });

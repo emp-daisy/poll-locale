@@ -1,49 +1,50 @@
 import { pickBy, identity } from 'lodash';
 import Models from '../models';
+import ErrorHandling from '../utils/error-handling';
+import { isMongoId } from '../utils/validation';
 
 const { Location } = Models;
 
 const LocationController = {
   getLocation: async (_req, res) => {
-    const locations = Location.find();
+    const locations = await Location.find();
     res.status(200).json({ locations, message: 'All locations' });
   },
-  getOneLocation: async (req, res) => {
-    const { name, id } = req.params;
-    const location = Location.findOne({ $or: [{ name }, { _id: id }] });
-    res.status(200).json({ location, message: 'Get one location' });
+  getOneLocation: async ({ params: { search } }, res) => {
+    const searchObject = isMongoId(search) ? { _id: search } : { name: new RegExp(search, 'i') };
+    const location = await Location.findOne(searchObject);
+    if (location === null) { return res.status(404).json({ message: 'Location not found' }); }
+    return res.status(200).json({ location, message: 'Get one location' });
   },
   addLocation: async (req, res) => {
     const { name, description } = req.body;
-    const newLocation = new Location({ name, description });
     try {
-      const data = await newLocation.save();
-      res.status(201).json({ location: data, message: 'Created a location' });
+      const data = await new Location({ name, description }).save();
+      return res.status(201).json({ location: data, message: 'Created a location' });
     } catch (err) {
-      const message = (err.name === 'MongoError' && err.code === 11000) ? 'Location name already exist!' : 'Failed to create a location';
-      res.status(500).json({ message });
+      const message = ErrorHandling(err) || 'Failed to create a location';
+      return res.status(500).json({ message });
     }
   },
   updateLocation: async (req, res) => {
-    const { id } = req.params;
-    const { name, description } = req.body;
+    const { params: { id }, body: { name, description } } = req;
     try {
-      const updatedLocation = await Location.findByIdAndUpdate(
-        id, pickBy({ name, description }, identity), { new: true },
+      const location = await Location.findByIdAndUpdate(
+        id, pickBy({ name, description }, identity), { new: true, runValidators: true },
       );
-      if (updatedLocation == null) { return res.status(500).json({ message: 'Location does not exist' }); }
-      return res.status(200).json({ location: updatedLocation, message: 'Updated a location' });
+      if (location == null) { return res.status(500).json({ message: 'Location does not exist' }); }
+      return res.status(200).json({ location, message: 'Updated a location' });
     } catch (err) {
-      const message = (err.name === 'MongoError' && err.code === 11000) ? 'Location name already exist!' : 'Failed to update a location';
+      const message = ErrorHandling(err) || 'Failed to update a location';
       return res.status(500).json({ message });
     }
   },
   deleteLocation: async (req, res) => {
     const { id } = req.params;
     const location = Location.findById(id);
+    if (location == null) { return res.status(500).json({ message: 'Location does not exist' }); }
     try {
       const deletedLocation = location.remove();
-      if (deletedLocation == null) { return res.status(500).json({ message: 'Location does not exist' }); }
       return res.status(200).json({ location: deletedLocation, message: 'Deleted a location' });
     } catch (err) {
       return res.status(500).json({ message: 'Failed to delete a location' });

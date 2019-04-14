@@ -7,12 +7,8 @@ const Middleware = {
     }
     return next();
   },
-  validateLocationId: (req, res, next) => {
-    if (!validator.isMongoId(req.body.id)) {
-      return res.status(400).json({ message: 'Invalid location ID in parameter' });
-    }
-    return next();
-  },
 };
+
+export const isMongoId = id => validator.isMongoId(id);
 
 export default Middleware;
