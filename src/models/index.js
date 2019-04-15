@@ -6,6 +6,7 @@ import SubLocation from './sub-location';
 const connection = () => mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useCreateIndex: true,
+  useFindAndModify: false,
 });
 
 const models = { Location, SubLocation };

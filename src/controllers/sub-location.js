@@ -15,9 +15,9 @@ const SubLocationController = {
     let location = await SubLocation.findOne(searchObject)
       .populate('locationId')
       .exec();
+    if (location === null) { return res.status(404).json({ message: 'Sub-Location does not exist' }); }
     location = location.toJSON({ getters: false, virtuals: false });
-    if (location === null) { return res.status(404).json({ message: 'Location not found' }); }
-    return res.status(200).json({ location, message: 'Get one sub-location' });
+    return res.status(200).json({ location, message: 'Sub-Location found' });
   },
   addSubLocation: async (req, res) => {
     const {
@@ -28,9 +28,9 @@ const SubLocationController = {
     });
     try {
       const data = await newLocation.save();
-      return res.status(201).json({ location: data, message: 'Created a sub-location' });
-    } catch (err) {
-      const message = ErrorHandling(err) || 'Failed to create a sub-location';
+      return res.status(201).json({ location: data, message: 'New sub-location created' });
+    } catch (error) {
+      const message = ErrorHandling(error);
       return res.status(500).json({ message });
     }
   },
@@ -45,10 +45,10 @@ const SubLocationController = {
           name, maleCount, femaleCount, locationId,
         }, identity), { new: true, runValidators: true },
       );
-      if (location === null) { return res.status(500).json({ message: 'Sub-Location does not exist' }); }
-      return res.status(200).json({ location, message: 'Updated a sub-location' });
-    } catch (err) {
-      const message = ErrorHandling(err) || 'Failed to create a sub-location';
+      if (location === null) { return res.status(404).json({ message: 'Sub-Location does not exist' }); }
+      return res.status(200).json({ location, message: 'Sub-Location updated' });
+    } catch (error) {
+      const message = ErrorHandling(error);
       return res.status(500).json({ message });
     }
   },
@@ -56,11 +56,12 @@ const SubLocationController = {
     const { id } = req.params;
     const location = await SubLocation.findById(id);
     try {
-      if (location == null) { return res.status(500).json({ message: 'Sub-Location does not exist' }); }
+      if (location == null) { return res.status(404).json({ message: 'Sub-Location does not exist' }); }
       const deletedLocation = await location.remove();
-      return res.status(200).json({ location: deletedLocation, message: 'Deleted a sub-location' });
-    } catch (err) {
-      return res.status(500).json({ message: 'Failed to delete a sub-location' });
+      return res.status(200).json({ location: deletedLocation, message: 'Sub-Location deleted' });
+    } catch (error) {
+      const message = ErrorHandling(error);
+      return res.status(500).json({ message });
     }
   },
 

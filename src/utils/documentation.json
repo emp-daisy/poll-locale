@@ -1,0 +1,379 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Poll-Locale",
+    "description": "A census application API",
+    "contact": {
+      "name": "Jessica"
+    }
+  },
+  "basePath": "/api/",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/location": {
+      "get": {
+        "description": "Get all locations",
+        "summary": "/location",
+        "tags": [
+          "Location"
+        ],
+        "operationId": "LocationGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      },
+      "post": {
+        "description": "TODO: Add Description",
+        "summary": "/location",
+        "tags": [
+          "Location"
+        ],
+        "operationId": "LocationPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "description",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/location/{search}": {
+      "get": {
+        "description": "Get single location by name or id",
+        "summary": "/location/:search",
+        "tags": [
+          "Location"
+        ],
+        "operationId": "LocationLagosGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "path",
+            "required": true,
+            "description": "Name or ID",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/location/{id}": {
+      "put": {
+        "description": "TODO: Add Description",
+        "summary": "/location/:id",
+        "tags": [
+          "Location"
+        ],
+        "operationId": "LocationPut",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of location to edit",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      },
+      "delete": {
+        "description": "TODO: Add Description",
+        "summary": "/location/:id",
+        "tags": [
+          "Location"
+        ],
+        "operationId": "LocationDelete",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of location to delete",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/sublocation": {
+      "get": {
+        "description": "Get all Sub-location",
+        "summary": "/sublocation/",
+        "tags": [
+          "Sub-Location"
+        ],
+        "operationId": "SublocationGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      },
+      "post": {
+        "description": "TODO: Add Description",
+        "summary": "/sublocation/",
+        "tags": [
+          "Sub-Location"
+        ],
+        "operationId": "SublocationPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "maleCount",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "femaleCount",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "locationId",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/sublocation/{search}": {
+      "get": {
+        "description": "Get sublocation by Name or ID",
+        "summary": "/sublocation/:search",
+        "tags": [
+          "Sub-Location"
+        ],
+        "operationId": "SublocationIsoloGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "path",
+            "required": true,
+            "description": "Name or ID",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/sublocation/{id}": {
+      "put": {
+        "description": "Update One Sub-location",
+        "summary": "/sublocation/:id",
+        "tags": [
+          "Sub-Location"
+        ],
+        "operationId": "Sublocation5cb0a6a05f1e75403d473d8fPut",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "maleCount",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "femaleCount",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "locationId",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete on Sub-location",
+        "summary": "/sublocation/:id",
+        "tags": [
+          "Sub-Location"
+        ],
+        "operationId": "Sublocation5cb0a6a05f1e75403d473d8fDelete",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Location",
+      "description": "Location API"
+    },{
+      "name": "Sub-Location",
+      "description": "Sub-Location API"
+    }
+  ]
+}

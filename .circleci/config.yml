@@ -2,6 +2,7 @@ defaults: &defaults
   working_directory: ~/png
   docker:
     - image: circleci/node:11.4.0
+    - image: circleci/mongo:latest
 jobs:
   build:
     <<: *defaults

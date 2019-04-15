@@ -1,5 +1,5 @@
 const ErrorHandling = (error) => {
-  const { errors, name: errorName } = error;
+  const { errors, name: errorName, code } = error;
   const errorArray = (errors) ? Object.values(errors) : [];
   let errorMessage;
   switch (errorName) {
@@ -13,12 +13,13 @@ const ErrorHandling = (error) => {
       break;
     case 'MongoError':
       errorMessage = errorArray.map(field => field.message);
+      if (code === 11000) { errorMessage.push('Similar entry already exists!'); }
       break;
     case 'CastError':
       errorMessage = [`Invalid value '${error.value}' passed for ${error.path}`];
       break;
     default:
-      errorMessage = null;
+      errorMessage = ['Error completing request!'];
       break;
   }
   return errorMessage;

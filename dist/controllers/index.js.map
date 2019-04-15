@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/controllers/index.js"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;AAAA;;AACA","sourcesContent":["import LocationController from './location';\nimport SubLocationController from './sub-location';\n\n// eslint-disable-next-line import/prefer-default-export\nexport { LocationController, SubLocationController };\n"],"file":"index.js"}

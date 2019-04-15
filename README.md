@@ -2,7 +2,7 @@
 
 Location census API
 
-[API Documentation](https://poll-locale.herokuapp.com/api/v1)
+[API Documentation](https://poll-locale.herokuapp.com/api/docs)
 
 [User Interface](https://poll-locale.herokuapp.com)
 

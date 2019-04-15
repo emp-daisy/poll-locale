@@ -5,7 +5,7 @@ describe('Entry Route', () => {
   it('should call the entry route', (done) => {
     request(app)
       .get('/api/')
-      .expect(404, 'URL not found!')
+      .expect(404, { message: 'URL not found!' })
       .end((err) => {
         if (err) throw done(err);
         done();

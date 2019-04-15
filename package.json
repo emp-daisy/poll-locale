@@ -11,7 +11,7 @@
     "start:dev": "nodemon --exec 'babel-node ./src/index.js'",
     "test": "jest --detectOpenHandles",
     "lint": "eslint ./src --ext .js --fix",
-    "build": "rm -rf dist/* && babel -d ./dist ./src -s"
+    "build": "rm -rf dist/* && babel -d ./dist ./src -s  --copy-files"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -34,11 +34,13 @@
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "mongoose": "^5.4.22",
+    "swagger-ui-express": "^4.0.2",
     "validator": "^10.11.0"
   },
   "jest": {
     "verbose": true,
     "collectCoverage": true,
+    "testEnvironment": "node",
     "coverageReporters": [
       "json",
       "html",
@@ -60,7 +62,10 @@
       "!**/coverage/",
       "!__tests__/"
     ],
-    "globalTeardown": "<rootDir>/src/__tests__/global/cleanup.js"
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/__tests__/global/setup.js"
+    ],
+    "globalTeardown": "<rootDir>/src/__tests__/global/teardown.js"
   },
   "nodemonConfig": {
     "watch": [
